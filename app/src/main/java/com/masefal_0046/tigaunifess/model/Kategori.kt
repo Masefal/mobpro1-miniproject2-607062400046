@@ -1,0 +1,10 @@
+package com.masefal_0046.tigaunifess.model
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "kategori")
+data class Kategori(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val nama: String
+)
