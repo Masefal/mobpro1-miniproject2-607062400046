@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">TigaUniFess</string>
+    <string name="sampah">Sampah</string>
+    <string name="list">Tampilan List</string>
+    <string name="grid">Tampilan Grid</string>
+    <string name="add">Tambah Curhatan</string>
 </resources>

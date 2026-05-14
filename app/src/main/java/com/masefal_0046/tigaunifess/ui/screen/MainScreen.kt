@@ -1,5 +1,6 @@
 package com.masefal_0046.tigaunifess.ui.screen
 
+import android.R.attr.text
 import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -12,19 +13,30 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.DeleteSweep
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -33,44 +45,46 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.masefal_0046.tigaunifess.R
 import com.masefal_0046.tigaunifess.model.Pesan
+import com.masefal_0046.tigaunifess.navigation.Screen
 import com.masefal_0046.tigaunifess.ui.theme.TigaUniFessTheme
+import com.masefal_0046.tigaunifess.util.SettingDataStore
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(navController: NavHostController) {
     val context = LocalContext.current
-    val dataStore = SettingsDataStore(context)
+    val dataStore = SettingDataStore(context)
     val showList by dataStore.layoutFlow.collectAsState(true)
     val scope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(id = R.string.app_name)) },
+                title = { Text(text = stringResource(R.string.app_name)) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
                 actions = {
-                    // Tombol ke Recycle Bin (Innovation 3b)
-                    IconButton(onClick = { navController.navigate(Screen.Trash.route) }) {
+                    IconButton(onClick = {}) {
                         Icon(
                             imageVector = Icons.Default.DeleteSweep,
-                            contentDescription = "Gudang Ikhlas",
+                            contentDescription = stringResource(R.string.sampah),
                             tint = MaterialTheme.colorScheme.primary
                         )
                     }
-                    // Toggle Layout (Requirement 2f)
                     IconButton(onClick = {
                         scope.launch { dataStore.saveLayout(!showList) }
                     }) {
                         Icon(
                             painter = painterResource(
                                 if (showList) R.drawable.outline_grid_view_24
-                                else R.drawable.baseline_view_list_24
+                                else R.drawable.outline_view_list_24
                             ),
-                            contentDescription = if (showList) "Grid" else "List",
+                            contentDescription = if (showList) stringResource(R.string.grid) else stringResource(R.string.list),
                             tint = MaterialTheme.colorScheme.primary
                         )
                     }
@@ -79,16 +93,17 @@ fun MainScreen(navController: NavHostController) {
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { navController.navigate(Screen.Detail.createRoute()) }
+                onClick = {}
             ) {
                 Icon(
                     imageVector = Icons.Filled.Add,
-                    contentDescription = "Tambah Sambat",
+                    contentDescription = stringResource(R.string.add),
                     tint = MaterialTheme.colorScheme.primary
                 )
             }
         }
-    ) { innerPadding ->
+    ) {
+        innerPadding ->
         ScreenContent(showList, Modifier.padding(innerPadding), navController)
     }
 }
@@ -106,7 +121,7 @@ fun ScreenContent(showList: Boolean, modifier: Modifier, navController: NavHostC
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Belum ada sambatan. Gudang Ikhlas masih kosong.")
+            Text(text = "")
         }
     } else {
         if (showList) {
@@ -142,7 +157,10 @@ fun ScreenContent(showList: Boolean, modifier: Modifier, navController: NavHostC
 @Composable
 fun PesanListItem(pesan: Pesan, onClick: () -> Unit) {
     Column(
-        modifier = Modifier.fillMaxWidth().clickable { onClick() }.padding(16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() }
+            .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         Text(
@@ -162,7 +180,9 @@ fun PesanListItem(pesan: Pesan, onClick: () -> Unit) {
 @Composable
 fun PesanGridItem(pesan: Pesan, onClick: () -> Unit) {
     Card(
-        modifier = Modifier.fillMaxWidth().clickable { onClick() },
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick() },
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
