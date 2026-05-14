@@ -113,7 +113,7 @@ fun ScreenContent(showList: Boolean, modifier: Modifier, navController: NavHostC
     val context = LocalContext.current
     val factory = ViewModelFactory(context)
     val viewModel: MainViewModel = viewModel(factory = factory)
-    val data by viewModel.pesanList.collectAsState(initial = emptyList())
+    val data by viewModel.data.collectAsState(initial = emptyList())
 
     if (data.isEmpty()) {
         Column(
