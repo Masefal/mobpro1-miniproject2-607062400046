@@ -5,7 +5,6 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-
 @Entity(
     tableName = "pesan",
     foreignKeys = [
@@ -19,7 +18,7 @@ import androidx.room.PrimaryKey
     indices = [Index(value = ["idKategori"])]
 )
 data class Pesan(
-    @PrimaryKey(autoGenerate = true) val id:Long = 0,
+    @PrimaryKey(autoGenerate = true) val id:Long = 0L,
     val konten: String,
     val pengirim: String = "Anonymous",
     val idKategori: Long,

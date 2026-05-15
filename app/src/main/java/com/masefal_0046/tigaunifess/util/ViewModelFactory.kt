@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.masefal_0046.tigaunifess.database.FessRepository
 import com.masefal_0046.tigaunifess.database.TigaUniFessDb
+import com.masefal_0046.tigaunifess.ui.screen.DetailViewModel
 import com.masefal_0046.tigaunifess.ui.screen.MainViewModel
 
 class ViewModelFactory (
@@ -19,12 +20,14 @@ class ViewModelFactory (
             db.kategoriDao,
             settingDataStore
         )
-
         return when {
-            modelClass.isAssignableFrom(MainViewModel::class.java) -> {
+            modelClass == MainViewModel::class.java -> {
                 MainViewModel(repo) as T
             }
-            else -> throw IllegalArgumentException("Unknown ViewModel class")
+            modelClass == DetailViewModel::class.java -> {
+                DetailViewModel(repo) as T
+            }
+            else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }
 
     }

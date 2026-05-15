@@ -4,4 +4,13 @@
     <string name="list">Tampilan List</string>
     <string name="grid">Tampilan Grid</string>
     <string name="add">Tambah Curhatan</string>
+    <string name="hapus">Hapus</string>
+    <string name="pesan_hapus">Hapus catatan ini?</string>
+    <string name="batal">Batal</string>
+    <string name="edit">Edit Curhatan</string>
+    <string name="simpan">Simpan</string>
+    <string name="pilih_kategori">"Pilih Kategori: "</string>
+    <string name="nama_pengirim">Nama Pengirim (Opsional)</string>
+    <string name="isi_curhatan">Isi Curhatan</string>
+    <string name="list_kosong">Belum ada data</string>
 </resources>

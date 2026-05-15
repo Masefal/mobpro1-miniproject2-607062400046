@@ -1,5 +1,6 @@
 package com.masefal_0046.tigaunifess.ui.screen
 
+import android.content.res.Configuration
 import android.widget.Toast
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -14,13 +15,17 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.masefal_0046.tigaunifess.model.Pesan
+import androidx.navigation.compose.rememberNavController
 import com.masefal_0046.tigaunifess.util.ViewModelFactory
+import com.masefal_0046.tigaunifess.R
+import com.masefal_0046.tigaunifess.ui.theme.TigaUniFessTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,7 +39,7 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
 
     var konten by remember { mutableStateOf("") }
     var pengirim by remember { mutableStateOf("") }
-    var showDialog by remember { mutableStateOf(false) }
+    val showDialog = remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         if (id == null) return@LaunchedEffect
@@ -51,7 +56,7 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 },
-                title = { Text(if (id == null) "Tambah Sambat" else "Edit Sambat") },
+                title = { Text(if (id == null) stringResource(R.string.add) else stringResource(R.string.edit)) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
                     titleContentColor = MaterialTheme.colorScheme.primary,
@@ -62,15 +67,36 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
                             Toast.makeText(context, "Isi minimal 10 karakter!", Toast.LENGTH_LONG).show()
                             return@IconButton
                         }
-                        if (id == null) viewModel.insert(konten, pengirim)
-                        else viewModel.update(id, konten, pengirim)
-
+                        val idKategori = when (selectedKategori) {
+                            "Akademik" -> 1L
+                            "Organisasi" -> 2L
+                            "Kosan" -> 3L
+                            else -> 4L
+                        }
+                        if (id == null) {
+                            viewModel.insert(
+                                konten = konten,
+                                pengirim = pengirim,
+                                idKategori = idKategori
+                            )
+                        } else {
+                            viewModel.update(
+                                id = id,
+                                konten = konten,
+                                pengirim = pengirim,
+                                idKategori = idKategori
+                            )
+                        }
                         navController.popBackStack()
                     }) {
-                        Icon(Icons.Outlined.Check, contentDescription = "Simpan")
+                        Icon(
+                            imageVector = Icons.Outlined.Check,
+                            contentDescription = stringResource(R.string.simpan),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
                     }
                     if (id != null) {
-                        DeleteAction { showDialog = true }
+                        DeleteAction { showDialog.value = true }
                     }
                 }
             )
@@ -84,6 +110,15 @@ fun DetailScreen(navController: NavHostController, id: Long? = null) {
             onKategoriChange = { selectedKategori = it },
             modifier = Modifier.padding(padding)
         )
+        if (id != null && showDialog.value) {
+            DisplayAlertDialog(
+                onDismissRequest = { showDialog.value = false }
+            ) {
+                showDialog.value = false
+                viewModel.delete(id)
+                navController.popBackStack()
+            }
+        }
     }
 }
 
@@ -96,13 +131,15 @@ fun FormPesan(
     modifier: Modifier
 ) {
     Column(
-        modifier = modifier.fillMaxSize().padding(16.dp),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         OutlinedTextField(
             value = isi,
             onValueChange = onIsiChange,
-            label = { Text("Isi Sambatan") },
+            label = { Text(text = stringResource(R.string.isi_curhatan)) },
             modifier = Modifier.fillMaxWidth(),
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences,
@@ -112,14 +149,16 @@ fun FormPesan(
         OutlinedTextField(
             value = pengirim,
             onValueChange = onPengirimChange,
-            label = { Text("Nama Pengirim (Opsional)") },
+            label = { Text(text = stringResource(R.string.nama_pengirim)) },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
 
-        Text(text = "Pilih Kategori:", style = MaterialTheme.typography.titleMedium)
+        Text(text = stringResource(R.string.pilih_kategori), style = MaterialTheme.typography.titleMedium)
         Column(
-            modifier = Modifier.fillMaxWidth().border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.small)
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(1.dp, MaterialTheme.colorScheme.outline, MaterialTheme.shapes.small)
         ) {
             kategori.forEach { item ->
                 Row(
@@ -153,5 +192,14 @@ fun DeleteAction(delete: () -> Unit) {
                 onClick = { expanded = false; delete() }
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+fun DetailScreenPreview() {
+    TigaUniFessTheme {
+        DetailScreen(rememberNavController())
     }
 }

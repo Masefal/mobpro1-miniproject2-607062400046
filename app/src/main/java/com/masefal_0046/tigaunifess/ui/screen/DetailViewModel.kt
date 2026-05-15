@@ -11,7 +11,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class DetailViewModel(private val fessRepository: FessRepository) : ViewModel() {
-
     fun insert(konten: String, pengirim: String, idKategori: Long) {
         val pesan = Pesan(
             konten = konten,
@@ -50,4 +49,12 @@ class DetailViewModel(private val fessRepository: FessRepository) : ViewModel() 
         }
     }
 
+    fun seedKategori() {
+        viewModelScope.launch(Dispatchers.IO) {
+            fessRepository.insertKategori(Kategori(id = 1L, nama = "Akademik"))
+            fessRepository.insertKategori(Kategori(id = 2L, nama = "Organisasi"))
+            fessRepository.insertKategori(Kategori(id = 3L, nama = "Kosan"))
+            fessRepository.insertKategori(Kategori(id = 4L, nama = "Cinta"))
+        }
+    }
 }

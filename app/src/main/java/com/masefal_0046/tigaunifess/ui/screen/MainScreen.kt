@@ -1,8 +1,8 @@
 package com.masefal_0046.tigaunifess.ui.screen
 
-import android.R.attr.text
 import android.content.res.Configuration
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -53,6 +53,8 @@ import com.masefal_0046.tigaunifess.navigation.Screen
 import com.masefal_0046.tigaunifess.ui.theme.TigaUniFessTheme
 import com.masefal_0046.tigaunifess.util.SettingDataStore
 import com.masefal_0046.tigaunifess.util.ViewModelFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -72,7 +74,11 @@ fun MainScreen(navController: NavHostController) {
                     titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
                 actions = {
-                    IconButton(onClick = {}) {
+                    IconButton(onClick = {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            dataStore.saveLayout(!showList)
+                        }
+                    }) {
                         Icon(
                             imageVector = Icons.Default.DeleteSweep,
                             contentDescription = stringResource(R.string.sampah),
@@ -96,7 +102,9 @@ fun MainScreen(navController: NavHostController) {
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {}
+                onClick = {
+                    navController.navigate(Screen.FormBaru.route)
+                }
             ) {
                 Icon(
                     imageVector = Icons.Filled.Add,
@@ -124,7 +132,7 @@ fun ScreenContent(showList: Boolean, modifier: Modifier, navController: NavHostC
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "")
+            Text(text = stringResource(R.string.list_kosong))
         }
     } else {
         if (showList) {
@@ -133,8 +141,8 @@ fun ScreenContent(showList: Boolean, modifier: Modifier, navController: NavHostC
                 contentPadding = PaddingValues(bottom = 84.dp)
             ) {
                 items(data) { pesan ->
-                    PesanListItem(pesan = pesan) {
-                        navController.navigate(Screen.FormBaru)
+                    ListItem(pesan = pesan) {
+                        navController.navigate(Screen.FormUbah.withId(pesan.id))
                     }
                     HorizontalDivider(thickness = 0.5.dp, color = DividerDefaults.color)
                 }
@@ -148,9 +156,10 @@ fun ScreenContent(showList: Boolean, modifier: Modifier, navController: NavHostC
                 contentPadding = PaddingValues(8.dp, 8.dp, 8.dp, 84.dp)
             ) {
                 items(data) { pesan ->
-                    PesanGridItem(pesan = pesan) {
-                        navController.navigate(Screen.FormUbah)
+                    GridItem(pesan = pesan) {
+                        navController.navigate(Screen.FormUbah.withId(pesan.id))
                     }
+                    HorizontalDivider()
                 }
             }
         }
@@ -158,7 +167,7 @@ fun ScreenContent(showList: Boolean, modifier: Modifier, navController: NavHostC
 }
 
 @Composable
-fun PesanListItem(pesan: Pesan, onClick: () -> Unit) {
+fun ListItem(pesan: Pesan, onClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -166,6 +175,21 @@ fun PesanListItem(pesan: Pesan, onClick: () -> Unit) {
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
+        val namaKategori = when(pesan.idKategori) {
+            1L -> "Akademik"
+            2L -> "Organisasi"
+            3L -> "Kosan"
+            else -> "Cinta"
+        }
+        Text(
+            text = namaKategori,
+            style = MaterialTheme.typography.labelSmall,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.background(
+                color = MaterialTheme.colorScheme.primaryContainer,
+                shape = MaterialTheme.shapes.extraSmall
+            ).padding(horizontal = 4.dp, vertical = 2.dp)
+        )
         Text(
             text = pesan.konten,
             maxLines = 2,
@@ -181,10 +205,9 @@ fun PesanListItem(pesan: Pesan, onClick: () -> Unit) {
 }
 
 @Composable
-fun PesanGridItem(pesan: Pesan, onClick: () -> Unit) {
+fun GridItem(pesan: Pesan, onClick: () -> Unit) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = Modifier.fillMaxWidth()
             .clickable { onClick() },
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
@@ -214,7 +237,7 @@ fun PesanGridItem(pesan: Pesan, onClick: () -> Unit) {
 @Preview(showBackground = true)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun MainScreenPreview() {
     TigaUniFessTheme {
         MainScreen(rememberNavController())
     }
