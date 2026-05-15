@@ -23,10 +23,10 @@ interface PesanDao {
     fun getTrashPesan(): Flow<List<Pesan>>
 
     @Query("UPDATE pesan SET isDelete = 1 WHERE id = :id")
-    suspend fun moveToTrash(id: Int)
+    suspend fun moveToTrash(id: Long)
 
     @Query("UPDATE pesan SET isDelete = 0 WHERE id = :id")
-    suspend fun restoreFromTrash(id: Int)
+    suspend fun restoreFromTrash(id: Long)
 
     @Delete
     suspend fun deletePermanen(pesan: Pesan)

@@ -18,7 +18,7 @@ class MainViewModel(private val fessRepository: FessRepository) : ViewModel() {
     )
 
     suspend fun getPesanById(id: Long): Pesan? {
-        return fessRepository.allPesan.first().find { it.id.toLong() == id }
+        return fessRepository.allPesan.first().find { it.id == id }
     }
 
     fun deletePesan(pesan: Pesan) {

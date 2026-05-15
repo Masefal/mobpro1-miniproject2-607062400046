@@ -19,10 +19,10 @@ import androidx.room.PrimaryKey
     indices = [Index(value = ["idKategori"])]
 )
 data class Pesan(
-    @PrimaryKey(autoGenerate = true) val id:Int = 0,
+    @PrimaryKey(autoGenerate = true) val id:Long = 0,
     val konten: String,
     val pengirim: String = "Anonymous",
-    val idKategori: Int,
+    val idKategori: Long,
     val tanggal: Long = System.currentTimeMillis(),
     val isDelete: Boolean = false
 )

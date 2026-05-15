@@ -15,8 +15,8 @@ class FessRepository(
 
     suspend fun insertPesan(pesan: Pesan) = pesanDao.insert(pesan)
     suspend fun updatePesan(pesan: Pesan) = pesanDao.update(pesan)
-    suspend fun moveToTrash(id: Int) = pesanDao.moveToTrash(id)
-    suspend fun restoreFromTrash(id: Int) = pesanDao.restoreFromTrash(id)
+    suspend fun moveToTrash(id: Long) = pesanDao.moveToTrash(id)
+    suspend fun restoreFromTrash(id: Long) = pesanDao.restoreFromTrash(id)
     suspend fun deletePermanen(pesan: Pesan) = pesanDao.deletePermanen(pesan)
 
     val allKategori: Flow<List<Kategori>> = kategoriDao.getAllKategori()

@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.DeleteSweep
@@ -50,6 +52,7 @@ import com.masefal_0046.tigaunifess.model.Pesan
 import com.masefal_0046.tigaunifess.navigation.Screen
 import com.masefal_0046.tigaunifess.ui.theme.TigaUniFessTheme
 import com.masefal_0046.tigaunifess.util.SettingDataStore
+import com.masefal_0046.tigaunifess.util.ViewModelFactory
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -131,7 +134,7 @@ fun ScreenContent(showList: Boolean, modifier: Modifier, navController: NavHostC
             ) {
                 items(data) { pesan ->
                     PesanListItem(pesan = pesan) {
-                        navController.navigate(Screen.Detail.createRoute(pesan.id))
+                        navController.navigate(Screen.FormBaru)
                     }
                     HorizontalDivider(thickness = 0.5.dp, color = DividerDefaults.color)
                 }
@@ -146,7 +149,7 @@ fun ScreenContent(showList: Boolean, modifier: Modifier, navController: NavHostC
             ) {
                 items(data) { pesan ->
                     PesanGridItem(pesan = pesan) {
-                        navController.navigate(Screen.Detail.createRoute(pesan.id))
+                        navController.navigate(Screen.FormUbah)
                     }
                 }
             }
