@@ -75,9 +75,7 @@ fun MainScreen(navController: NavHostController) {
                 ),
                 actions = {
                     IconButton(onClick = {
-                        CoroutineScope(Dispatchers.IO).launch {
-                            dataStore.saveLayout(!showList)
-                        }
+                        navController.navigate(Screen.Trash.route)
                     }) {
                         Icon(
                             imageVector = Icons.Default.DeleteSweep,

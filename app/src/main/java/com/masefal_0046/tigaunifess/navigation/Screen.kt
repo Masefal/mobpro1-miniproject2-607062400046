@@ -7,4 +7,5 @@ sealed class Screen(val route: String) {
     data object FormUbah: Screen("detailScreen/{$KEY_ID_TELUFESS}") {
         fun withId(id: Long) = "detailScreen/$id"
     }
+    data object Trash: Screen("trashScreen")
 }

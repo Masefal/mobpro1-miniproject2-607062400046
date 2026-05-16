@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.masefal_0046.tigaunifess.ui.screen.DetailScreen
 import com.masefal_0046.tigaunifess.ui.screen.MainScreen
+import com.masefal_0046.tigaunifess.ui.screen.TrashScreen
 
 @Composable
 fun SetupNavGraph(navController: NavHostController = rememberNavController()) {
@@ -30,6 +31,9 @@ fun SetupNavGraph(navController: NavHostController = rememberNavController()) {
         ) { navBackStackEntry ->
             val id = navBackStackEntry.arguments?.getLong(KEY_ID_TELUFESS)
             DetailScreen(navController, id)
+        }
+        composable(route = Screen.Trash.route) {
+            TrashScreen(navController)
         }
     }
 }
