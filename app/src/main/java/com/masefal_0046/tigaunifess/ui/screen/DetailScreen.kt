@@ -188,7 +188,7 @@ fun DeleteAction(delete: () -> Unit) {
         }
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             DropdownMenuItem(
-                text = { Text("Hapus Permanen") },
+                text = { Text(stringResource(R.string.hapus)) },
                 onClick = { expanded = false; delete() }
             )
         }

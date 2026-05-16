@@ -14,4 +14,10 @@
     <string name="isi_curhatan">Isi Curhatan</string>
     <string name="list_kosong">Belum ada data</string>
     <string name="lainnya">Opsi lainnya</string>
+    <string name="masuk_sampah">Masukkan ke sampah</string>
+    <string name="hapus_permanen">Hapus Permanen</string>
+    <string name="alert_permanen">Hapus Permanen?</string>
+    <string name="text_alert_permanen">Curhatan ini bakal dihapus selamanya</string>
+    <string name="back">Balik</string>
+    <string name="sampah_empty">Tidak ada sampah</string>
 </resources>
